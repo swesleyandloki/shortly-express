@@ -23,24 +23,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 
-app.get('/', 
+app.get('/',
+function(req, res) {
+  // if (!loggedIn) {
+  //   res.redirect('/login');
+  // }
+  res.render('index');
+});
+
+app.get('/create',
 function(req, res) {
   res.render('index');
 });
 
-app.get('/create', 
-function(req, res) {
-  res.render('index');
-});
-
-app.get('/links', 
+app.get('/links',
 function(req, res) {
   Links.reset().fetch().then(function(links) {
     res.send(200, links.models);
   });
 });
 
-app.post('/links', 
+app.post('/links',
 function(req, res) {
   var uri = req.body.url;
 
@@ -64,7 +67,7 @@ function(req, res) {
           title: title,
           base_url: req.headers.origin
         });
-
+        console.log('LINKSLINKSLINKS', link);
         link.save().then(function(newLink) {
           Links.add(newLink);
           res.send(200, newLink);
@@ -74,10 +77,28 @@ function(req, res) {
   });
 });
 
+// { username: 'jon', password: '1234' }
+
+app.post('/signup',
+  function(req, res){
+    console.log(req.body);
+
+    var user = new User(req.body);
+    console.log('USERUSER',user);
+  });
+
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
+app.get('/login',
+  function(req, res) {
+    res.render('login');
+  });
 
+app.get('/signup',
+  function(req, res) {
+    res.render('signup');
+  });
 
 
 /************************************************************/
