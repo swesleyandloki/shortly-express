@@ -82,9 +82,22 @@ function(req, res) {
 app.post('/signup',
   function(req, res){
     console.log(req.body);
+    new User(req.body).fetch().then(function(found) {
+      console.log('FOUNDFOUNDFOUND', found);
+      if (found) {
+        res.send(200);
+        res.redirect('/signin');
+      } else {
+        var user = new User(req.body);
+        console.log('USERUSER',user);
 
-    var user = new User(req.body);
-    console.log('USERUSER',user);
+        user.save().then(function(newUser) {
+          Users.add(newUser);
+          // res.send(200, newUser);
+          res.redirect('/');
+        });
+      }
+    });
   });
 
 /************************************************************/

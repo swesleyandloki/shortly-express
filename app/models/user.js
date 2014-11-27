@@ -19,6 +19,5 @@ var User = db.Model.extend({
 
 });
 
-// hash password
 
 module.exports = User;
